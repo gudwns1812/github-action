@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="hello.dockerpractice.DockerpracticeApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-05-13T00:40:01.348Z" hostname="baghyeongjun-ui-MacBookPro.local" time="0.295">
+  <properties/>
+  <testcase name="contextLoads()" classname="hello.dockerpractice.DockerpracticeApplicationTests" time="0.295"/>
+  <system-out><![CDATA[09:40:00.899 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [hello.dockerpractice.DockerpracticeApplicationTests]: DockerpracticeApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+09:40:00.933 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration hello.dockerpractice.DockerpracticeApplication for test class hello.dockerpractice.DockerpracticeApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.5)
+
+2025-05-13T09:40:01.051+09:00  INFO 3478 --- [dockerpractice] [    Test worker] h.d.DockerpracticeApplicationTests       : Starting DockerpracticeApplicationTests using Java 17.0.15 with PID 3478 (started by hj.park in /Users/hj.park/IdeaProjects/toss2025/springboot/dockerpractice)
+2025-05-13T09:40:01.051+09:00  INFO 3478 --- [dockerpractice] [    Test worker] h.d.DockerpracticeApplicationTests       : No active profile set, falling back to 1 default profile: "default"
+2025-05-13T09:40:01.342+09:00  INFO 3478 --- [dockerpractice] [    Test worker] h.d.DockerpracticeApplicationTests       : Started DockerpracticeApplicationTests in 0.367 seconds (process running for 0.674)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
