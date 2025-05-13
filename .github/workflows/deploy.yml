@@ -1,30 +1,53 @@
-name: Github Actions 실행시켜보기
+name: Deploy To EC2
 
 on:
   push:
     branches:
       - main
 
-jobs: 
-  My-Deploy-Job:
+jobs:
+  deploy:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Hello World 찍기
-        run: echo "Hello World"
-        
-      - name: 여러 명령어 문장 작성하기
-        run: |
-          echo "Good"
-          echo "Morning"
+      - name: Github Repository 파일 불러오기
+        uses: actions/checkout@v4
 
-      # 참고: https://docs.github.com/en/actions/learn-github-actions/variables
-      - name: Github Actions 자체에 저장되어 있는 변수 사용해보기
-        run: |
-          echo $GITHUB_SHA
-          echo $GITHUB_REPOSITORY
+      - name: JDK 17버전 설치
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
 
-      - name: Github Actions Secret 변수 사용해보기
-        run: |
-          echo ${{ secrets.MY_NAME }}
-          echo ${{ secrets.MY_HOBBY }}
+      - name: application.yml 파일 만들기
+        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
+
+      - name: 테스트 및 빌드하기
+        run: ./gradlew clean build
+
+      - name: 빌드된 파일 이름 변경하기
+        run: mv ./build/libs/*SNAPSHOT.jar ./project.jar
+
+      - name: SCP로 EC2에 빌드된 파일 전송하기
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: project.jar
+          target: /home/ubuntu/hello-server/tobe
+
+      - name: SSH로 EC2에 접속하기
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+             rm -rf /home/ubuntu/hello-server/current
+             mkdir /home/ubuntu/hello-server/current
+             mv /home/ubuntu/hello-server/tobe/project.jar /home/ubuntu/hello-server/current/project.jar
+             cd /home/ubuntu/hello-server/current
+             sudo fuser -k -n tcp 8080 || true
+             nohup java -jar project.jar > ./output.log 2>&1 & 
+             rm -rf /home/ubuntu/hello-server/tobe
